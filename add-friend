@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ ! -d .git ]; then
+    echo "$(pwd) is not a git repository" >&2
+    exit 1
+fi
+
+if [ $# != 1 ]; then 
+    echo "Usage: $0 <friend name>"
+    exit 1
+fi 
+
+FRIEND=$1
+REPO_NAME=`git config --local remote.origin.url|sed -n 's#.*/\([^.]*\)\.git#\1#p'`
+
+if [ $FRIEND == 'upstream' ]; then
+    FORK_NAME=gooddata
+else
+    FORK_NAME=$FRIEND
+fi
+
+git remote add $FRIEND git@github.com:$FORK_NAME/$REPO_NAME.git
